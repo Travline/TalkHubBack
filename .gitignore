@@ -1,0 +1,53 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# TypeScript
+dist/
+*.tsbuildinfo
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Compilado de TypeScript
+*.tsbuildinfo
+
+# Dependencias de editor
+.vscode/
+.idea/
+
+# Coverage de tests
+coverage/
+
+# Archivos de configuración de IDEs
+*.sublime-workspace
+*.sublime-project
+
+# Directorios de build
+build/
+
+# Archivos de configuración local
+*.local
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Archivos generados por herramientas de documentación
+*.apidoc/
+
+# Archivos de base de datos locales (si aplicable)
+*.db
+*.sqlite
