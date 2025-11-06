@@ -7,3 +7,8 @@ export interface UserCreate extends UserBase {
   mail: string
   pwd: string
 }
+
+export interface UserLogin {
+  mail: string
+  pwd: string
+}
