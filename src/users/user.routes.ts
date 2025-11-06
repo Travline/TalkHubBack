@@ -13,13 +13,17 @@ userRouter.post('/register', async (req: Request<{}, {}, UserCreate>, res: Respo
       'INSERT INTO users (name, mail, pwd) VALUES (?,?,?)',
       [name, mail, pwd]
     )
-    const idUser = await turso.execute(
+    const row = (await turso.execute(
       'SELECT idUser FROM users WHERE mail = ?',
       [mail]
-    )
+    )).rows.at(0) as Row
     res
       .status(201)
-      .cookie('talkhub-cookie', idUser)
+      .cookie('talkhub-cookie', row.idUser, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false
+      })
       .json({ message: 'User created' })
   } catch (err) {
     console.error(err)
@@ -35,18 +39,23 @@ userRouter.post('/login', async (req: Request<{}, {}, UserLogin>, res: Response)
       [mail, pwd]
     )).rows
     if (data.length === 0) {
-      res.status(404).json({ error: 'User not founds' })
+      return res.status(404).json({ error: 'User not founds' })
     }
-    const row: Row = data.at(0) as Row
-    console.log(row[0])
-    res
+    const row = data.at(0) as Row
+    return res
       .status(200)
-      .cookie('talkhub-cookie', row[0])
+      .cookie('talkhub-cookie', row.idUser, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false
+      })
       .json({ message: 'User found' })
   } catch (err) {
     console.error(err)
-    res.status(404).json({ error: 'User not founds' })
+    return res.status(404).json({ error: 'User not founds' })
   }
 })
+
+// Pendiente el /webs base del dashboard
 
 export default userRouter
