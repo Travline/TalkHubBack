@@ -1,15 +1,14 @@
-import express from 'express';
-import { turso } from './core/db';
+import express from 'express'
+import cookieParser from 'cookie-parser'
+import userRouter from './user/user.routes'
 
-const app = express();
-app.use(express.json());
+const app = express()
+
+app.use(express.json())
+app.use(cookieParser())
+
+app.use('/user', userRouter)
 
 app.listen(1591, () => {
-    console.log("Starting server");
-})
-
-app.get('/ola', async (_req, res) => {
-    let ola = await turso.execute("SELECT * FROM roles")
-    console.log(ola);
-    res.json(ola)
+  console.log('Starting server')
 })

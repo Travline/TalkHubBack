@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "lint": "ts-standard",
     "build": "tsc && tsc-esm-fix",
     "start": "node build/index.js",
     "tsc": "tsc",
@@ -22,13 +24,25 @@
   },
   "homepage": "https://github.com/Travline/TalkHubBack#readme",
   "devDependencies": {
+    "@types/cookie-parser": "1.4.10",
     "@types/express": "5.0.5",
+    "ts-standard": "12.0.2",
     "tsc-esm-fix": "3.1.2",
+    "tsx": "4.20.6",
     "typescript": "5.9.3"
   },
   "dependencies": {
     "@libsql/client": "0.15.15",
+    "cookie-parser": "1.4.7",
     "dotenv": "17.2.3",
     "express": "5.1.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "extends": [
+      "./node_modules/ts-standard/eslintrc.json"
+    ]
   }
 }
