@@ -22,6 +22,7 @@ dashboardRouter.get('/roles', async (req: Request, res: Response) => {
       }
       return true
     }
+
     const modRows = (await turso.execute(
       'SELECT idMod FROM mods WHERE idUser = ?',
       [idUser]
@@ -32,6 +33,11 @@ dashboardRouter.get('/roles', async (req: Request, res: Response) => {
       }
       return true
     }
+
+    if (!clientExists() && !modExists()) {
+      return res.status(400).json({ error: 'Role not founds' })
+    }
+
     return res.status(200).json({
       clientRole: clientExists(),
       modRole: modExists()
