@@ -25,6 +25,7 @@
   "homepage": "https://github.com/Travline/TalkHubBack#readme",
   "devDependencies": {
     "@types/cookie-parser": "1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "5.0.5",
     "ts-standard": "12.0.2",
     "tsc-esm-fix": "3.1.2",
@@ -34,6 +35,7 @@
   "dependencies": {
     "@libsql/client": "0.15.15",
     "cookie-parser": "1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "17.2.3",
     "express": "5.1.0"
   },

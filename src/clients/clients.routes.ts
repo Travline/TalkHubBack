@@ -9,7 +9,6 @@ clientRouter.post('/addClient/:tier', async (req: Request, res: Response) => {
   try {
     const { tier } = req.params
     const iduser: string = req.cookies['talkhub-cookie']
-    console.log(iduser)
     if (iduser === undefined) {
       return res.status(401).json({ error: 'Missing cookies' })
     }
