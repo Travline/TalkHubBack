@@ -8,8 +8,8 @@ const clientRouter = express.Router()
 clientRouter.post('/addClient/:tier', async (req: Request, res: Response) => {
   try {
     const { tier } = req.params
-    const iduser: string = req.cookies['talkhub-cookie']
-    if (iduser === undefined) {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
       return res.status(401).json({ error: 'Missing cookies' })
     }
     const tiers = new Set(['1', '2', '3'])
@@ -18,7 +18,7 @@ clientRouter.post('/addClient/:tier', async (req: Request, res: Response) => {
     }
     await turso.execute(
       'INSERT INTO clients(idUser, idTier) VALUES (?,?)',
-      [iduser, tier ?? 0]
+      [idUser, tier ?? 0]
     )
     return res.status(201).json({ message: 'Client created' })
   } catch (err) {

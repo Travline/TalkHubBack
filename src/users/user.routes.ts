@@ -56,6 +56,4 @@ userRouter.post('/login', async (req: Request<{}, {}, UserLogin>, res: Response)
   }
 })
 
-// Pendiente el /webs base del dashboard
-
 export default userRouter
