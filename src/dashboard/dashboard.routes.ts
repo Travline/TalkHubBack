@@ -1,7 +1,7 @@
 import express from 'express'
 import type { Request, Response } from 'express'
 import { turso } from '../core/db'
-// import type { Row } from '@libsql/client'
+import type { Row } from '@libsql/client'
 
 const dashboardRouter = express.Router()
 
@@ -48,7 +48,7 @@ dashboardRouter.get('/roles', async (req: Request, res: Response) => {
   }
 })
 
-/* dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
+dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
   try {
     const idUser: string = req.cookies['talkhub-cookie']
     if (idUser === undefined) {
@@ -71,16 +71,23 @@ dashboardRouter.get('/roles', async (req: Request, res: Response) => {
       })().idClient as number
     }
     const idWeb = (): string => {
-      // generated id
-      return 'ola'
+      const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      let resultado = ''
+      for (let i = 0; i < 16; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length)
+        resultado += caracteres[indice] as string
+      }
+      return resultado
     }
     await turso.execute(
-      'INSERT INTO webs(idWeb, idClient, domain)'
+      'INSERT INTO webs(idWeb, idClient, domain) VALUES (?,?,?)',
+      [idWeb(), idClient(), domain]
     )
+    return res.status(201).json({ message: 'Web added' })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Error adding web' })
   }
-}) */
+})
 
 export default dashboardRouter
