@@ -13,7 +13,8 @@ app.use(cors({
   origin: [
     'https://talkhubback.onrender.com',
     'http://localhost:4200',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://saas-angular.vercel.app/'
   ],
   credentials: true
 }))

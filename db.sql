@@ -25,12 +25,12 @@ CREATE TABLE clients (
 
 -- Tabla de webs
 CREATE TABLE webs (
-    idWeb INTEGER PRIMARY KEY AUTOINCREMENT,
+    idWeb TEXT PRIMARY KEY,
     idClient INTEGER NOT NULL,
     domain TEXT NOT NULL UNIQUE,
-    mode TEXT NOT NULL,
+    mode TEXT NOT NULL DEFAULT 'Anónimo',
     anonName TEXT NOT NULL DEFAULT 'Anónimo',
-    modName TEXT NULL,
+    modName TEXT NOT NULL DEFAULT '',
     addName TEXT NOT NULL DEFAULT '<Moderador>',
     status INTEGER NOT NULL DEFAULT 1, -- 0: Inactivo, 1: Activo
     FOREIGN KEY (idClient) REFERENCES clients(idClient) ON DELETE CASCADE
@@ -40,7 +40,7 @@ CREATE TABLE webs (
 CREATE TABLE mods (
     idMod INTEGER PRIMARY KEY AUTOINCREMENT,
     idUser INTEGER NOT NULL,
-    idWeb INTEGER NOT NULL,
+    idWeb TEXT NOT NULL,
     FOREIGN KEY (idUser) REFERENCES users(idUser) ON DELETE CASCADE,
     FOREIGN KEY (idWeb) REFERENCES webs(idWeb) ON DELETE CASCADE
 );
@@ -48,7 +48,7 @@ CREATE TABLE mods (
 -- Tabla de comentarios anónimos sin referencia a users
 CREATE TABLE comments (
     idComment INTEGER PRIMARY KEY AUTOINCREMENT,
-    idWeb INTEGER NOT NULL,
+    idWeb TEXT NOT NULL,
     rootId INTEGER NULL,
     replyTo INTEGER NULL,
     fullURL TEXT NOT NULL,
@@ -56,7 +56,8 @@ CREATE TABLE comments (
     userRef TEXT NULL,
     content TEXT NOT NULL,
     created TIMESTAMP DEFAULT (datetime('now', 'utc')),
+    replies INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (idWeb) REFERENCES webs(idWeb) ON DELETE CASCADE,
     FOREIGN KEY (rootId) REFERENCES comments(idComment) ON DELETE CASCADE,
     FOREIGN KEY (replyTo) REFERENCES comments(idComment) ON DELETE CASCADE
-);
+  );

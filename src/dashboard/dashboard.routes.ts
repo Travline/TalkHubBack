@@ -44,8 +44,43 @@ dashboardRouter.get('/roles', async (req: Request, res: Response) => {
     })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Error creating client' })
+    return res.status(500).json({ error: 'Error verifying role' })
   }
 })
+
+/* dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
+  try {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
+      return res.status(401).json({ error: 'Missing cookies' })
+    }
+    const { domain } = req.params
+    if (domain === undefined) {
+      return res.status(400).json({ error: 'Unexcpected domain' })
+    }
+    const clientRows = (await turso.execute(
+      'SELECT idClient FROM clients WHERE idUser = ?',
+      [idUser]
+    )).rows
+    if (clientRows.length === 0) {
+      return res.status(404).json({ error: 'Client not found' })
+    }
+    const idClient = (): number => {
+      return (function (): Row {
+        return clientRows.at(0) as Row
+      })().idClient as number
+    }
+    const idWeb = (): string => {
+      // generated id
+      return 'ola'
+    }
+    await turso.execute(
+      'INSERT INTO webs(idWeb, idClient, domain)'
+    )
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Error adding web' })
+  }
+}) */
 
 export default dashboardRouter
