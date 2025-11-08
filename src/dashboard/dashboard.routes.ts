@@ -90,4 +90,33 @@ dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
   }
 })
 
+dashboardRouter.get('/client', async (req: Request, res: Response) => {
+  try {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
+      return res.status(401).json({ error: 'Missing cookies' })
+    }
+    const clientRows = (await turso.execute(
+      'SELECT idClient FROM clients WHERE idUser = ?',
+      [idUser]
+    )).rows
+    if (clientRows.length === 0) {
+      return res.status(404).json({ error: 'Client not found' })
+    }
+    const idClient = (): number => {
+      return (function (): Row {
+        return clientRows.at(0) as Row
+      })().idClient as number
+    }
+    const webs = (await turso.execute(
+      'SELECT idWeb, domain, mode, status FROM webs WHERE idClient = ?',
+      [idClient()]
+    )).rows
+    return res.status(201).json(webs)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Error adding web' })
+  }
+})
+
 export default dashboardRouter
