@@ -61,19 +61,10 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
       'INSERT INTO comments(idWeb, rootId, replyTo, fullURL, user, userRef, content) VALUES(?,?,?,?,?,?,?)',
       [idWeb(), rootId, replyTo, fullUrl, user, userRef, content]
     )
-    /* const repliesRows = (await turso.execute(
-      'SELECT replies FROM comments WHERE replyTo = ?',
-      [replyTo]
-    )).rows
-    const currentReplies = (): number => {
-      return (function () {
-        return repliesRows.at(0) as Row
-      })().replies as number
-    }
     await turso.execute(
-      'UPDATE comments SET replies = ? WHERE idComment = ?',
-      [currentReplies() + 1, replyTo]
-    ) */
+      'UPDATE comments SET replies = replies + 1 WHERE idComment = ?',
+      [replyTo]
+    )
     return res.status(201).json({ message: 'Comment created' })
   } catch (err) {
     console.error(err)
