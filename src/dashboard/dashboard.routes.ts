@@ -119,4 +119,6 @@ dashboardRouter.get('/client', async (req: Request, res: Response) => {
   }
 })
 
+// Añadir el get de /mod cuando se añada el registro de moderadores
+
 export default dashboardRouter
