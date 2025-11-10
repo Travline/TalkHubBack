@@ -6,7 +6,7 @@ import clientRouter from './clients/clients.routes'
 import dashboardRouter from './dashboard/dashboard.routes'
 import configRouter from './dashboard/config/config.routes'
 import implementRouter from './comments/implement.routes'
-// import inboxRouter from './comments/inbox.routes'
+import inboxRouter from './comments/inbox.routes'
 
 const app = express()
 
@@ -29,7 +29,7 @@ app.use('/clients', clientRouter)
 app.use('/dashboard', dashboardRouter)
 app.use('/dashboard/config', configRouter)
 app.use('/comments/implement', implementRouter)
-// app.use('/comments/inbox', inboxRouter)
+app.use('/comments/inbox', inboxRouter)
 
 const PORT = process.env.PORT ?? 3000
 
