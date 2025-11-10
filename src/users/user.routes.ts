@@ -22,7 +22,7 @@ userRouter.post('/register', async (req: Request<{}, {}, UserCreate>, res: Respo
       .cookie('talkhub-cookie', row.idUser, {
         httpOnly: true,
         sameSite: 'none',
-        secure: false
+        secure: true
       })
       .json({ message: 'User created' })
   } catch (err) {
@@ -47,7 +47,7 @@ userRouter.post('/login', async (req: Request<{}, {}, UserLogin>, res: Response)
       .cookie('talkhub-cookie', row.idUser, {
         httpOnly: true,
         sameSite: 'none',
-        secure: false
+        secure: true
       })
       .json({ message: 'User found' })
   } catch (err) {
