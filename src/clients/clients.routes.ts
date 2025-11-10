@@ -27,4 +27,21 @@ clientRouter.post('/addClient/:tier', async (req: Request, res: Response) => {
   }
 })
 
+clientRouter.get('/data', async (req: Request, res: Response) => {
+  try {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
+      return res.status(401).json({ error: 'Missing cookies' })
+    }
+    const client = (await turso.execute(
+      'SELECT idClient, idUser, idTier, status FROM clients WHERE idUser = ?',
+      [idUser]
+    )).rows
+    return res.status(200).json(client.at(0))
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Error fetching client data' })
+  }
+})
+
 export default clientRouter
