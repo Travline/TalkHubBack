@@ -10,9 +10,6 @@ import implementRouter from './comments/implement.routes'
 
 const app = express()
 
-app.use(express.json())
-app.use(cookieParser())
-app.set('trust proxy', true)
 app.use(cors({
   origin: [
     'https://talkhubback.onrender.com',
@@ -22,6 +19,10 @@ app.use(cors({
   ],
   credentials: true
 }))
+
+app.use(express.json())
+app.use(cookieParser())
+app.set('trust proxy', true)
 
 app.use('/users', userRouter)
 app.use('/clients', clientRouter)

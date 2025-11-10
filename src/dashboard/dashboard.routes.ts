@@ -70,7 +70,7 @@ dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
         return clientRows.at(0) as Row
       })().idClient as number
     }
-    const idWeb = (): string => {
+    const idWeb = (function () {
       const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
       let resultado = ''
       for (let i = 0; i < 16; i++) {
@@ -78,10 +78,14 @@ dashboardRouter.post('/addWeb/:domain', async (req: Request, res: Response) => {
         resultado += caracteres[indice] as string
       }
       return resultado
-    }
+    })()
     await turso.execute(
       'INSERT INTO webs(idWeb, idClient, domain) VALUES (?,?,?)',
-      [idWeb(), idClient(), domain]
+      [idWeb, idClient(), domain]
+    )
+    await turso.execute(
+      'INSERT INTO mods(idUser, idWeb) VALUES (?,?)',
+      [idUser, idWeb]
     )
     return res.status(201).json({ message: 'Web added' })
   } catch (err) {
@@ -112,12 +116,41 @@ dashboardRouter.get('/client', async (req: Request, res: Response) => {
       'SELECT idWeb, domain, mode, status FROM webs WHERE idClient = ?',
       [idClient()]
     )).rows
-    return res.status(201).json(webs)
+    return res.status(200).json(webs)
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Error adding web' })
   }
 })
+
+/* dashboardRouter.get('/mod', async (req: Request, res: Response) => {
+  try {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
+      return res.status(401).json({ error: 'Missing cookies' })
+    }
+    const clientRows = (await turso.execute(
+      'SELECT idMod FROM mods WHERE idUser = ?',
+      [idUser]
+    )).rows
+    if (clientRows.length === 0) {
+      return res.status(404).json({ error: 'Mod not found' })
+    }
+    const idMod = (): number => {
+      return (function (): Row {
+        return clientRows.at(0) as Row
+      })().idClient as number
+    }
+    const webs = (await turso.execute(
+      'SELECT idWeb, domain, mode, status FROM webs WHERE idClient = ?',
+      [idMod()]
+    )).rows
+    return res.status(200).json(webs)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Error adding web' })
+  }
+}) */
 
 // Añadir el get de /mod cuando se añada el registro de moderadores
 
