@@ -89,7 +89,7 @@ inboxRouter.get('/:idWeb/:idComment', async (req: Request, res: Response) => {
   }
 })
 
-/* inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Response) => {
+inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Response) => {
   try {
     const idUser: string = req.cookies['talkhub-cookie']
     if (idUser === undefined) {
@@ -102,7 +102,7 @@ inboxRouter.get('/:idWeb/:idComment', async (req: Request, res: Response) => {
     if (idComment === undefined) {
       return res.status(400).json({ error: 'Missing idComment' })
     }
-    if (content === undefined) {
+    if (content === undefined || content.trim().length === 0) {
       return res.status(400).json({ error: 'Missing content' })
     }
     const modRows = (await turso.execute(
@@ -119,32 +119,40 @@ inboxRouter.get('/:idWeb/:idComment', async (req: Request, res: Response) => {
     if (webRows.length === 0) {
       return res.status(404).json({ error: 'Web not found' })
     }
-    const webMode = (): string => {
-      return (function () {
-        return webRows.at(0) as Row
-      })().mode as string
+    const webConfig = (function () {
+      return webRows.at(0) as Row
+    })()
+    const commentRows = (await turso.execute(
+      'SELECT * FROM comments WHERE idComment = ?',
+      [idComment]
+    )).rows
+    if (commentRows.length === 0) {
+      return res.status(404).json({ error: 'Web not found' })
     }
-    const anonName = (): string => {
-      return (function () {
-        return webRows.at(0) as Row
-      })().anonName as string
-    }
-    if (content === undefined || content.trim().length === 0) {
-      return res.status(400).json({ error: 'Missing content' })
-    }
+    const commentToReply = (function () {
+      return commentRows.at(0) as Row
+    })()
     await turso.execute(
       'INSERT INTO comments(idWeb, rootId, replyTo, fullURL, user, userRef, content) VALUES(?,?,?,?,?,?,?)',
-      [idWeb(), rootId, replyTo, fullUrl, user, userRef, content]
+      [
+        idWeb,
+        (commentToReply.rootId === null) ? idComment : null,
+        idComment,
+        commentToReply.fullURL as number,
+        `${(webConfig.modName === '') ? 'Anónimo' : webConfig.modName as string} <strong>${webConfig.addName as string}</strong>`,
+        idUser,
+        content
+      ]
     )
     await turso.execute(
       'UPDATE comments SET replies = replies + 1 WHERE idComment = ?',
-      [replyTo]
+      [idComment]
     )
     return res.status(201).json({ message: 'Comment created' })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Error creating comment' })
   }
-}) */
+})
 
 export default inboxRouter
