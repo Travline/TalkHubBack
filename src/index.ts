@@ -15,7 +15,8 @@ app.use(cors({
     'https://talkhubback.onrender.com',
     'http://localhost:4200',
     'http://localhost:3000',
-    'https://saas-angular.vercel.app'
+    'https://saas-angular.vercel.app',
+    'https://support-forum-one.vercel.app'
   ],
   credentials: true
 }))
