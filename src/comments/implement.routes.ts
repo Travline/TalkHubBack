@@ -132,6 +132,7 @@ implementRouter.get('/replies', async (req: Request, res: Response) => {
           userRef: comment.userRef as string ?? null,
           content: comment.content as string,
           replies: comment.replies as number,
+          created: comment.created as string,
           comments: replies
         }
       )
@@ -179,6 +180,7 @@ implementRouter.get('/replies/direct', async (req: Request, res: Response) => {
           userRef: comment.userRef as string ?? null,
           content: comment.content as string,
           replies: comment.replies as number,
+          created: comment.created as string,
           comments: replies
         }
       )

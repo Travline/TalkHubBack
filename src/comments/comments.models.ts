@@ -17,5 +17,6 @@ export interface CommentResponse {
   userRef: string | null
   content: string
   replies: number
+  created: string
   comments: Row[]
 }
