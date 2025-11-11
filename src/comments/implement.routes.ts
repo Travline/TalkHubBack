@@ -10,10 +10,6 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
   try {
     const host = req.header('Host-URL') as string
     const fullUrl = req.header('Full-URL') as string
-    if (!fullUrl.includes(host)) {
-      console.error('1')
-      return res.status(400).json({ error: 'URL does not match the host request' })
-    }
     if (fullUrl === undefined) {
       console.error('2')
       return res.status(400).json({ error: 'Missing Full-URL header' })
@@ -76,11 +72,7 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
 
 implementRouter.get('/', async (req: Request, res: Response) => {
   try {
-    const host = req.header('Host-URL') as string
     const fullUrl = req.header('Full-URL') as string
-    if (!fullUrl.includes(host)) {
-      return res.status(400).json({ error: 'URL does not match the host request' })
-    }
     if (fullUrl === undefined) {
       return res.status(400).json({ error: 'Missing Full-URL header' })
     }
@@ -100,11 +92,7 @@ implementRouter.get('/', async (req: Request, res: Response) => {
 
 implementRouter.get('/replies', async (req: Request, res: Response) => {
   try {
-    const host = req.header('Host-URL') as string
     const fullUrl = req.header('Full-URL') as string
-    if (!fullUrl.includes(host)) {
-      return res.status(400).json({ error: 'URL does not match the host request' })
-    }
     if (fullUrl === undefined) {
       return res.status(400).json({ error: 'Missing Full-URL header' })
     }
@@ -150,9 +138,6 @@ implementRouter.get('/replies/direct', async (req: Request, res: Response) => {
   try {
     // const host = req.header('Host-URL') as string
     const fullUrl = req.header('Full-URL') as string
-    if (fullUrl === undefined) {
-      return res.status(400).json({ error: 'Missing Full-URL header' })
-    }
     const rootComments = (await turso.execute(
       'SELECT idComment, rootId, replyTo, user, userRef, content, created, replies \n' +
       'FROM comments \n' +
