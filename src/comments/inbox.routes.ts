@@ -99,18 +99,30 @@ inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Respon
     if (idWeb === undefined) {
       return res.status(400).json({ error: 'Missing idWeb' })
     }
-    if (idComment === undefined) {
-      return res.status(400).json({ error: 'Missing idComment' })
-    }
-    if (content === undefined || content.trim().length === 0) {
-      return res.status(400).json({ error: 'Missing content' })
-    }
     const modRows = (await turso.execute(
       'SELECT idMod FROM mods WHERE idUser = ? AND idWeb = ?',
       [idUser, idWeb]
     )).rows
     if (modRows.length === 0) {
       return res.status(404).json({ error: 'Mod not found' })
+    }
+    if (idComment === undefined) {
+      return res.status(400).json({ error: 'Missing idComment' })
+    }
+    if (content === undefined || content.trim().length === 0) {
+      return res.status(400).json({ error: 'Missing content' })
+    }
+    const userRows = (await turso.execute(
+      'SELECT name FROM users WHERE idUser = ?',
+      [idUser]
+    )).rows
+    if (userRows.length === 0) {
+      return res.status(404).json({ error: 'Mod not found' })
+    }
+    const userName = (): string => {
+      return (function () {
+        return userRows.at(0) as Row
+      })().name as string
     }
     const webRows = (await turso.execute(
       'SELECT mode, anonName, modName, addName FROM webs WHERE idWeb = ?',
@@ -139,7 +151,7 @@ inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Respon
         (commentToReply.rootId === null) ? idComment : null,
         idComment,
         commentToReply.fullURL as number,
-        `${(webConfig.modName === '') ? 'Anónimo' : webConfig.modName as string} <strong>${webConfig.addName as string}</strong>`,
+        `${(webConfig.modName === '') ? ((webConfig.mode === 'Anónimo') ? 'Anónimo ' : `${userName()} `) : webConfig.modName as string}${webConfig.addName as string}`,
         idUser,
         content
       ]
