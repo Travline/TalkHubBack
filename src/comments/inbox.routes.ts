@@ -155,4 +155,42 @@ inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Respon
   }
 })
 
+inboxRouter.delete('/:idWeb/:idComment', async (req: Request, res: Response) => {
+  try {
+    const idUser: string = req.cookies['talkhub-cookie']
+    if (idUser === undefined) {
+      return res.status(401).json({ error: 'Missing cookies' })
+    }
+    const { idWeb, idComment } = req.params
+    if (idWeb === undefined) {
+      return res.status(400).json({ error: 'Missing idWeb' })
+    }
+    if (idComment === undefined) {
+      return res.status(400).json({ error: 'Missing idComment' })
+    }
+    const modRows = (await turso.execute(
+      'SELECT idMod FROM mods WHERE idUser = ? AND idWeb = ?',
+      [idUser, idWeb]
+    )).rows
+    if (modRows.length === 0) {
+      return res.status(404).json({ error: 'Mod not found' })
+    }
+    const commentRows = (await turso.execute(
+      'SELECT * FROM comments WHERE idWeb = ? AND idComment = ?',
+      [idWeb, idComment]
+    )).rows
+    if (commentRows.length === 0) {
+      return res.status(404).json({ error: 'Comment not found' })
+    }
+    await turso.execute(
+      'DELETE FROM comments WHERE idComment = ?',
+      [idComment]
+    )
+    return res.status(200).json({ message: 'Comment correctly deleted' })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Error deleting comment' })
+  }
+})
+
 export default inboxRouter
