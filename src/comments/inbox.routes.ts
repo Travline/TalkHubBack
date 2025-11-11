@@ -66,7 +66,7 @@ inboxRouter.get('/:idWeb/:idComment', async (req: Request, res: Response) => {
     for (let i = 0; i < commentRows.length; i++) {
       const comment = commentRows.at(i) as Row
       const replies = (await turso.execute(
-        'SELECT * FROM comments WHERE rootId = ?',
+        'SELECT * FROM comments WHERE replyTo = ?',
         [idComment]
       )).rows
       response.push(
