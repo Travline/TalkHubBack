@@ -78,6 +78,7 @@ inboxRouter.get('/:idWeb/:idComment', async (req: Request, res: Response) => {
           userRef: comment.userRef as string ?? null,
           content: comment.content as string,
           replies: comment.replies as number,
+          created: comment.created as string,
           comments: replies
         }
       )
