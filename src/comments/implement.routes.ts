@@ -11,9 +11,11 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
     const host = 'https://www.youtube.com'// `${req.protocol}://${req.hostname}`
     const fullUrl = req.header('Full-URL') as string
     if (!fullUrl.includes(host)) {
+      console.error('1')
       return res.status(400).json({ error: 'URL does not match the host request' })
     }
     if (fullUrl === undefined) {
+      console.error('2')
       return res.status(400).json({ error: 'Missing Full-URL header' })
     }
     const webRows = (await turso.execute(
