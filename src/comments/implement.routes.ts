@@ -39,7 +39,7 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
       })().anonName as string
     }
     let { rootId, replyTo, user, userRef, content } = req.body
-    if (content === undefined || content.trim().length === 0) {
+    if (typeof content !== 'string' || (content.trim()).length === 0) {
       return res.status(400).json({ error: 'Missing content' })
     }
     if (rootId === undefined || rootId === null) {
@@ -68,7 +68,7 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
     return res.status(201).json({ message: 'Comment created' })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Error creating comment ' + (err as string) })
+    return res.status(500).json({ error: 'Error creating comment ' })
   }
 })
 
