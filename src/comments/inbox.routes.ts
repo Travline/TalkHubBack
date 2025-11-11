@@ -199,6 +199,10 @@ inboxRouter.delete('/:idWeb/:idComment', async (req: Request, res: Response) => 
       'DELETE FROM comments WHERE idComment = ?',
       [idComment]
     )
+    await turso.execute(
+      'UPDATE comments SET replies = replies - 1 WHERE idComment = ?',
+      [(commentRows.at(0) as Row).replyTo as number]
+    )
     return res.status(200).json({ message: 'Comment correctly deleted' })
   } catch (err) {
     console.error(err)
