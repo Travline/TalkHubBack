@@ -68,7 +68,7 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
     return res.status(201).json({ message: 'Comment created' })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Error creating comment' })
+    return res.status(500).json({ error: 'Error creating comment ' + (err as string) })
   }
 })
 
