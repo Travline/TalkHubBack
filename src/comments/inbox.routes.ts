@@ -110,7 +110,7 @@ inboxRouter.post('/:idWeb/:idComment/:content', async (req: Request, res: Respon
     if (idComment === undefined) {
       return res.status(400).json({ error: 'Missing idComment' })
     }
-    if (content === undefined || content.trim().length === 0) {
+    if (typeof content !== 'string' || (content.trim()).length === 0) {
       return res.status(400).json({ error: 'Missing content' })
     }
     const userRows = (await turso.execute(
