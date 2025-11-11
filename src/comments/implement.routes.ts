@@ -9,7 +9,9 @@ const implementRouter = express.Router()
 implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Response) => {
   try {
     const host = `${req.protocol}://${req.hostname}`
+    console.log(host)
     const fullUrl = req.header('Full-URL') as string
+    console.log(fullUrl)
     if (!fullUrl.includes(host)) {
       console.error('1')
       return res.status(400).json({ error: 'URL does not match the host request' })
@@ -77,7 +79,9 @@ implementRouter.post('', async (req: Request<{}, {}, CommentImplement>, res: Res
 implementRouter.get('/', async (req: Request, res: Response) => {
   try {
     const host = `${req.protocol}://${req.hostname}`
+    console.log(host)
     const fullUrl = req.header('Full-URL') as string
+    console.log(fullUrl)
     if (!fullUrl.includes(host)) {
       return res.status(400).json({ error: 'URL does not match the host request' })
     }
@@ -101,7 +105,9 @@ implementRouter.get('/', async (req: Request, res: Response) => {
 implementRouter.get('/replies', async (req: Request, res: Response) => {
   try {
     const host = `${req.protocol}://${req.hostname}`
+    console.log(host)
     const fullUrl = req.header('Full-URL') as string
+    console.log(fullUrl)
     if (!fullUrl.includes(host)) {
       return res.status(400).json({ error: 'URL does not match the host request' })
     }
